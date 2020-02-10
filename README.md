@@ -1,5 +1,7 @@
 # iSeries<span>.</span>NET
 
+iSeries<span>.</span>NET is a .NET client for iSeries DB2 that implements the retry pattern with exponential back-off to overcome some of the known issues with the vanilla client.
+
 The IBM implementation of ADO<span>.</span>NET database provider for iSeries is not particularly resilient. In fact, the following is a quote from the IBM Redbook [Integrating DB2 Universal Universal Database for iSeries with for iSeries with Microsoft ADO.NET](https://www.redbooks.ibm.com/redbooks/pdfs/sg246440.pdf) page 103:
 
 > Handling communication errors (iDB2CommErrorException)
@@ -57,7 +59,30 @@ public class MyService : BaseAS400Service
     }
 }
 ```
-Example code to call the service method:
+The GetData generic method shown above expects a type that implements the iSeries.NET.Services.IMapper class:
+```C#
+public class PropertyDto : IMapper
+{
+    public int Quantity { get; set; }
+    public int Year { get; set; }
+    public string Make { get; set; }
+    public string Model { get; set; }
+    public decimal Value { get; set; }
+    public string IsVehicle { get; set; }
+
+    public void FromDb(iDB2DataReader reader)
+    {
+        Quantity = Convert.ToInt32((decimal)reader["QTY"]);
+        Year = Convert.ToInt32((decimal)reader["YEAR"]);
+        Make = reader.GetString("MAKE");
+        Model = reader.GetString("MODEL");
+        Value = (decimal)reader["VALUE"];
+        IsVehicle = reader.GetString("IS_VEHICLE");
+    }
+}
+```
+
+Finally, here is example code to call the service method:
 ```C#
 var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 var service = new MyService(connectionString);
