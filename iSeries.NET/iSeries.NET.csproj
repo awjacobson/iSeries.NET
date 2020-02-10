@@ -59,13 +59,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\DataReaderExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AS400DbContext.cs" />
     <Compile Include="Services\BaseAs400Service.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assemblies\IBM.Data.DB2.iSeries.dll" />
-    <Content Include="Assemblies\IBM.Data.DB2.iSeries.xml" />
+    <Content Include="lib\IBM.Data.DB2.iSeries.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\IBM.Data.DB2.iSeries.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig">
@@ -73,5 +78,6 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
