@@ -15,7 +15,6 @@ namespace iSeries.NET.Services
     /// 
     /// </summary>
     /// <remarks>
-    /// 
     /// From the IBM Redbook "Integrating DB2 Universal Universal Database for iSeries with for
     /// iSeries with Microsoft ADO .NET crosoft ADO .NET" (page 103):
     /// https://www.redbooks.ibm.com/redbooks/pdfs/sg246440.pdf
@@ -125,16 +124,14 @@ namespace iSeries.NET.Services
                     var msg = exception is iDB2CommErrorException
                         ? $"Message={((iDB2CommErrorException)exception).Message}, MessageCode={((iDB2CommErrorException)exception).MessageCode}, MessageDetails={((iDB2CommErrorException)exception).MessageDetails}"
                         : exception.Message;
-                    //var msg = "Error";
                     Logger.Error($"\n{Banner.Error}\n{exception.GetType().Name} caught in GetData (sqlStatement={sqlStatement}, parameters={parameters}, timeSpan={timeSpan}): {msg}", exception);
                 })
                 .Execute<IEnumerable<T>>(() => { return _dbContext.GetData<T>(sqlStatement, parameters); });
 
             return resultList;
-            //throw new Exception("AS/400 Communication error");
         }
 
-        protected IEnumerable<TimeSpan> SleepDurations => new[]
+        protected virtual IEnumerable<TimeSpan> SleepDurations => new[]
         {
             TimeSpan.FromSeconds(1),
             TimeSpan.FromSeconds(2),
